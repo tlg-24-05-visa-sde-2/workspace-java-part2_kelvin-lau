@@ -6,10 +6,35 @@ import static org.junit.Assert.*;
 
 public class TelevisionTest {
     private Television tv1;
+    private Television tv2;
 
     @Before
     public void setUp() {
-        tv1 = new Television();
+        tv1 = new Television("Sony", 50, DisplayType.PLASMA);
+        tv2 = new Television("Sony", 50, DisplayType.PLASMA);
+    }
+
+    @Test
+    public void equals_shouldReturnTrue_sameBrand_sameVolume_sameDisplay() {
+        assertEquals(tv1, tv2);
+    }
+
+    @Test
+    public void equals_shouldReturnFalse_sameBrand_sameVolume_differentDisplay() {
+        tv2.setDisplay(DisplayType.LED);
+        assertNotEquals(tv1, tv2);
+    }
+
+    @Test
+    public void equals_shouldReturnFalse_sameBrand_differentVolume_sameDisplay() {
+        tv2.setVolume(49);
+        assertNotEquals(tv1, tv2);
+    }
+
+    @Test
+    public void equals_shouldReturnFalse_differentBrand_sameVolume_sameDisplay() {
+        tv2.setBrand("LG");
+        assertNotEquals(tv1, tv2);
     }
 
     @Test
@@ -25,6 +50,28 @@ public class TelevisionTest {
     }
 
     @Test
+    public void changeChannel_shouldThrowInvalidChannelException_whenInvalid_lowerBound() {
+        try {
+            tv1.changeChannel(0);
+            fail("Should have thrown InvalidChannelException");
+        } catch (InvalidChannelException e){
+            String expected = "Invalid channel: 0. Allowed range: [1,999].";
+            assertEquals(expected, e.getMessage());
+        }
+    }
+
+    @Test
+    public void changeChannel_shouldThrowInvalidChannelException_whenInvalid_upperBound() {
+        try {
+            tv1.changeChannel(1000);
+            fail("Should have thrown InvalidChannelException");
+        } catch (InvalidChannelException e){
+            String expected = "Invalid channel: 1000. Allowed range: [1,999].";
+            assertEquals(expected, e.getMessage());
+        }
+    }
+
+    @Test
     public void setVolume_shouldStoreValue_whenValid_lowerBound() {
         tv1.setVolume(0);
         assertEquals(0, tv1.getVolume());
@@ -36,20 +83,13 @@ public class TelevisionTest {
         assertEquals(100, tv1.getVolume());
     }
 
-    @Test
-    public void setVolume_shouldNotStoreValue_whenInvalid_lowerBound() {
-
+    @Test(expected = IllegalArgumentException.class)
+    public void setVolume_shouldThrowIllegalArgumentException_whenInvalid_lowerBound() {
+        tv1.setVolume(-1);
     }
 
-    @Test
-    public void setVolume_shouldNotStoreValue_whenInvalid_upperBound() {
-    }
-
-    @Test
-    public void testChangeChannel() {
-    }
-
-    @Test
-    public void testChangeChannelInvalidChannelException() {
+    @Test(expected = IllegalArgumentException.class)
+    public void setVolume_shouldThrowIllegalArgumentException_whenInvalid_upperBound() {
+        tv1.setVolume(101);
     }
 }
