@@ -6,14 +6,8 @@
  * Copyright LearningPatterns Inc.
  */
 
-package com.javatunes.catalog.test;
+package com.javatunes.catalog;
 
-import com.javatunes.catalog.InMemoryCatalog;
-import com.javatunes.catalog.MusicCategory;
-import com.javatunes.catalog.MusicItem;
-import org.w3c.dom.ls.LSOutput;
-
-import java.util.ArrayList;
 import java.util.Collection;
 
 class InMemoryCatalogTest {
