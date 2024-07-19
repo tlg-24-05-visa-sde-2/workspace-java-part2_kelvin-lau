@@ -8,11 +8,8 @@
  */
 package com.entertainment.catalog;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
+
 import com.entertainment.Television;
 
 public class Catalog {
@@ -28,7 +25,15 @@ public class Catalog {
      * A no-matches result should be an empty collection (not null).
      */
     public static Collection<Television> findByBrand(String brand) {
-        return null;
+        Collection<Television> result = new ArrayList<>();
+
+        for (Television tv : catalog) {
+            if (tv.getBrand().equals(brand)) {
+                result.add(tv);
+            }
+        }
+
+        return result;
     }
 
     /**
@@ -36,8 +41,24 @@ public class Catalog {
      * with a corresponding collection of matching Televisions for that brand.
      * A no-brands-passed result should be an empty map (not null).
      */
-    public static Map<String,Collection<Television>> findByBrands(String... brands) {
-        return null;
+    public static Map<String,Collection<Television>> findByBrands(String first, String... rest) {
+        Map<String,Collection<Television>> result = new HashMap<>();
+
+        Collection<Television> firstTvs = findByBrand(first);
+        if (!firstTvs.isEmpty()) {
+            result.put(first,firstTvs);
+        }
+
+
+        for (String brand : rest) {
+            Collection<Television> tvs = findByBrand(brand);
+
+            if (!tvs.isEmpty()) {
+                result.put(brand, tvs);
+            }
+        }
+
+        return result;
     }
 
     /**
