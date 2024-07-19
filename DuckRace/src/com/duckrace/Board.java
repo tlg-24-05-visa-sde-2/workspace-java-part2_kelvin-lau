@@ -66,7 +66,7 @@ public class Board {
         System.out.println(titleUnder);
 
         System.out.println();
-        
+
         System.out.println("id name wins prizes");
         System.out.println("__ ____ ____ ______");
 
