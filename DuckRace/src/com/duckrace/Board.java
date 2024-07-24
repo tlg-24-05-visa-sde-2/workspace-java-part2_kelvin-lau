@@ -59,21 +59,28 @@ public class Board {
 //    }
 
     public void show() {
-        Collection<DuckRacer> racers = racerMap.values();
-        String title = "Duck Race Results";
-        String titleUnder = "=".repeat(title.length());
-        System.out.println(title);
-        System.out.println(titleUnder);
+        if (racerMap.isEmpty()) {
+            System.out.println("There are currently no results to show\n");
+        } else {
+            Collection<DuckRacer> racers = racerMap.values();
+            System.out.println();
+            String title = "Duck Race Results";
+            String titleUnder = "=".repeat(title.length());
+            System.out.println(title);
+            System.out.println(titleUnder);
 
-        System.out.println();
+            System.out.println();
 
-        System.out.println("id name wins prizes");
-        System.out.println("__ ____ ____ ______");
+            System.out.println("id name wins prizes");
+            System.out.println("-- ---- ---- ------");
 
-        for (DuckRacer racer : racers) {
-            System.out.printf("%s %s %s %s\n",
-                    racer.getId(), racer.getName(), racer.getWins(), racer.getRewards());
+            for (DuckRacer racer : racers) {
+                System.out.printf("%s %s %s %s\n",
+                        racer.getId(), racer.getName(), racer.getWins(), racer.getRewards());
+            }
         }
+
+
     }
 
     private Map<Integer, String> loadStudentIdMap() {
