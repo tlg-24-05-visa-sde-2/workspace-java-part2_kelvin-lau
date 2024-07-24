@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.Map;
 import org.junit.Before;
 import org.junit.Test;
+import java.sql.Date;
 
 public class EmployeeFactoryTest {
     private Map<String,String> seMap;
@@ -51,24 +52,46 @@ public class EmployeeFactoryTest {
      * assertEquals(SalariedEmployee.class, emp.getClass())
      */
     @Test
-    public void testCreateEmployeeSalaried() {
+    public void createEmployee_shouldReturnSalariedEmployee_SE() {
         // TODO
+        Employee emp = EmployeeFactory.createEmployee(seMap);
+        assertEquals(SalariedEmployee.class, emp.getClass());
+
+        verifyCommonProperties(emp);
+
+        SalariedEmployee semp = (SalariedEmployee) emp;
+        assertEquals(50000.0, semp.getSalary(), .001);
+    }
+
+    private static void verifyCommonProperties(Employee emp) {
+        assertEquals("Jackie", emp.getName());
+        assertEquals(Date.valueOf("1990-08-24"), emp.getHireDate());
     }
 
     /**
      * TASK: verify that passing heMap into your factory returns a HourlyEmployee, with all properties set.
      */
     @Test
-    public void testCreateEmployeeHourly() {
+    public void createEmployee_shouldReturnHourlyEmployee_HE() {
         // TODO
+        Employee emp = EmployeeFactory.createEmployee(heMap);
+        assertEquals(HourlyEmployee.class, emp.getClass());
+        
+        verifyCommonProperties(emp);
+
+        HourlyEmployee hemp = (HourlyEmployee) emp;
+        assertEquals(50.0, hemp.getRate(), .001);
+        assertEquals(40.0, hemp.getHours(), .001);
     }
 
     /**
      * TASK: verify that passing a map with an invalid "type" value results in IllegalArgumentException.
      * The only valid values for "type" are "HE" or "SE".
      */
-    @Test
-    public void testCreateEmployeeInvalidTypeThrowsIllegalArgumentException() {
+    @Test (expected = IllegalArgumentException.class)
+    public void createEmployee_shouldThrowIllegalArgumentException_invalidType() {
         // TODO
+        seMap.put("type", "INVALID-TYPE");
+        EmployeeFactory.createEmployee(seMap);
     }
 }
