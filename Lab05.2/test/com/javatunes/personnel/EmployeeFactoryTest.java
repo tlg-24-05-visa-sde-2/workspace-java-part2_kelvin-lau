@@ -76,7 +76,7 @@ public class EmployeeFactoryTest {
         // TODO
         Employee emp = EmployeeFactory.createEmployee(heMap);
         assertEquals(HourlyEmployee.class, emp.getClass());
-        
+
         verifyCommonProperties(emp);
 
         HourlyEmployee hemp = (HourlyEmployee) emp;
