@@ -6,7 +6,7 @@ class DuckRacerTest {
 
     public static void main(String[] args) {
         DuckRacer racer = new DuckRacer(1, "Bullen");
-        Board board = new Board();
+        Board board = Board.getInstance();
 
         System.out.println(racer);
 

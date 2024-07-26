@@ -1,5 +1,9 @@
 package com.duckrace;
 
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serial;
+import java.io.Serializable;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.*;
@@ -37,9 +41,33 @@ import java.util.*;
  *   17       17    Dom        1    DEBIT_CARD
  */
 
-public class Board {
+public class Board implements Serializable {
+    private static final String DATA_FILE_PATH = "data/board.dat";
+    private static final String CONF_FILE_PATH = "conf/student-ids.csv";
+
+    public static Board getInstance() {
+        Board board = null;
+
+        if (Files.exists(Path.of(DATA_FILE_PATH))) {
+            try (ObjectInputStream in = new ObjectInputStream(Files.newInputStream(Path.of(DATA_FILE_PATH)))) {
+                board = (Board) in.readObject();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        } else {
+            board = new Board();
+        }
+
+        return board;
+    }
+
     private final Map<Integer,String> studentIdMap = loadStudentIdMap();
     private final Map<Integer,DuckRacer> racerMap  = new TreeMap<>();
+
+    private Board() {
+
+    }
+
 
     public void update(int id, Reward reward) {
         DuckRacer racer;
@@ -52,11 +80,17 @@ public class Board {
         }
 
         racer.win(reward);
+
+        save();
     }
 
-//    void dumpStudentIdMap() {
-//        System.out.println(studentIdMap);
-//    }
+    private void save() {
+        try (ObjectOutputStream out = new ObjectOutputStream(Files.newOutputStream(Path.of(DATA_FILE_PATH)))) {
+            out.writeObject(this);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
     public void show() {
         if (racerMap.isEmpty()) {
@@ -87,7 +121,7 @@ public class Board {
         Map<Integer, String> map = new HashMap<Integer, String>();
 
         try {
-            List<String> lines = Files.readAllLines(Path.of("conf/student-ids.csv"));
+            List<String> lines = Files.readAllLines(Path.of(CONF_FILE_PATH));
 
             for (String line : lines) {
                 String[] tokens = line.split(",");
