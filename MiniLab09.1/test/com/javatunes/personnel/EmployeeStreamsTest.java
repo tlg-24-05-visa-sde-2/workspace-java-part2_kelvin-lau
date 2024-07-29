@@ -52,7 +52,12 @@ public class EmployeeStreamsTest {
      */
     @Test
     public void findAll_nameLengthAtMost5_sortBySalary() {
+        List<Employee> result = allEmployees.stream()
+                .filter(emp -> emp.getName().length() <= 5)
+                .sorted((emp1, emp2) -> emp1.getSalary().compareTo(emp2.getSalary()))
+                .collect(Collectors.toList());
 
+        dump(result);
     }
 
     /**
@@ -61,7 +66,12 @@ public class EmployeeStreamsTest {
      */
     @Test
     public void findAll_salaryAtLeast50000_sortByHireDate() {
+        List<Employee> result = allEmployees.stream()
+                .filter(emp -> emp.getSalary() >= 50_000.0)
+                .sorted((emp1, emp2) -> emp1.getHireDate().compareTo(emp2.getHireDate()))
+                .collect(Collectors.toList());
 
+        dump(result);
     }
 
     /**
@@ -69,7 +79,11 @@ public class EmployeeStreamsTest {
      */
     @Test
     public void count_salaryAtLeast75000() {
+        long count = allEmployees.stream()
+                .filter(emp -> emp.getSalary() >= 75_000.0)
+                .count();
 
+        System.out.println(count);
     }
 
     /**
@@ -77,7 +91,13 @@ public class EmployeeStreamsTest {
      */
     @Test
     public void threeHighestPaid_sortByName() {
+        List<Employee> result = allEmployees.stream()
+                .sorted(Comparator.comparing(Employee::getSalary).reversed())
+                .limit(3)
+                .sorted(Comparator.comparing(Employee::getName))
+                .collect(Collectors.toList());
 
+        dump(result);
     }
 
     /**
@@ -86,7 +106,13 @@ public class EmployeeStreamsTest {
      */
     @Test
     public void findAllNames_hired2010Later() {
+        List<String> result = allEmployees.stream()
+                .filter(emp -> emp.getHireDate().getYear() >= 2010)
+                .map(emp -> emp.getName())
+                .sorted()
+                .collect(Collectors.toList());
 
+        dump(result);
     }
 
     /**
@@ -97,7 +123,10 @@ public class EmployeeStreamsTest {
      */
     @Test
     public void payAll_salaryAtMost50000_lowestPaidFirst() {
-
+        allEmployees.stream()
+                .filter(emp -> emp.getSalary() <= 50_000.0)
+                .sorted(Comparator.comparing(Employee::getSalary))
+                .forEach(Employee::pay);
     }
 
     /**
@@ -106,7 +135,10 @@ public class EmployeeStreamsTest {
      */
     @Test
     public void workAll_salaryAtLeast75000_descendingSalaryOrder() {
-
+        allEmployees.stream()
+                .filter(emp -> emp.getSalary() >= 75_000.0)
+                .sorted(Comparator.comparing(Employee::getSalary).reversed())
+                .forEach(Employee::work);
     }
 
     /**
@@ -115,7 +147,11 @@ public class EmployeeStreamsTest {
      */
     @Test
     public void giveRaise_salaryLessThan50000_hiredAfter2000_lowestPaidFirst() {
-
+        allEmployees.stream()
+                .filter(emp -> emp.getHireDate().getYear() > 2000)
+                .filter(emp -> emp.getSalary() < 50_000.0)
+                .sorted(Comparator.comparing(Employee::getSalary))
+                .forEach(emp -> emp.setSalary(100_000.0));
     }
 
     /**
@@ -123,7 +159,11 @@ public class EmployeeStreamsTest {
      */
     @Test
     public void anyEmployees_nameStartWithZ() {
+        List<Employee> result = allEmployees.stream()
+                .filter(emp -> emp.getName().startsWith("Z"))
+                .collect(Collectors.toList());
 
+        System.out.println(!result.isEmpty());
     }
 
     /**
@@ -131,7 +171,10 @@ public class EmployeeStreamsTest {
      */
     @Test
     public void allEmployeesHired2000_orLater() {
+        boolean result = allEmployees.stream()
+                .allMatch(emp -> emp.getHireDate().getYear() >= 2000);
 
+        System.out.println(result);
     }
 
     /**
@@ -139,7 +182,8 @@ public class EmployeeStreamsTest {
      */
     @Test
     public void averageSalary_hired2000_orLater() {
-
+        Double result = allEmployees.stream()
+                .
     }
 
     /**

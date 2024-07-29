@@ -13,12 +13,7 @@ class JewelSortTest {
         jewels.add("onyx");
         jewels.add("saphire");
 
-        jewels.sort(new Comparator<String>() {
-            @Override
-            public int compare(String jewel1, String jewel2) {
-                return Integer.compare(jewel1.length(), jewel2.length());
-            }
-        });
+        jewels.sort((j1, j2) -> j1.compareTo(j2));
         dump(jewels);
 
     }
